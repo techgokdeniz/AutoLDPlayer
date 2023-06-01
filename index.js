@@ -2,8 +2,14 @@ import LDPlayer from "./LDPlayer.js";
 
 const LDPlayerPath = "C:\\LDPlayer\\LDPlayer64\\ldconsole.exe";
 
-(function () {
-  const player = new LDPlayer(LDPlayerPath);
+(async function () {
+  const player = new LDPlayer(LDPlayerPath, false);
   player.start();
-  player.quaitAll();
+  player.launchName("LDPlayer");
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  player.isRunningByName("LDPlayer");
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  player.isRunningByIndex("LDPlayer");
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+  player.quitName("LDPlayer");
 })();
