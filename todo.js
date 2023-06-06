@@ -14,9 +14,11 @@ TODO: COMMAND LİST
 [✓] remove --name <PlayerName> -> LDPlayer sil
 [✓] remove --index <PlayerIndex> -> LDPlayer sil
 [✓] copy --name <PlayerName> --newname <NewPlayerName> -> LDPlayer kopyala
+[✓] reboot --name <PlayerName> -> LDPlayer isim ile yeniden başlat
+[✓] reboot --index <PlayerIndex> -> LDPlayer index ile yeniden başlat
+[✓] rename --name <PlayerName> --title <NewPlayerName> -> LDPlayer isim ile yeniden adlandır
+[✓] rename --index <PlayerIndex> --title <NewPlayerName> -> LDPlayer index ile yeniden adlandır
 
-[❌] reboot
-[❌] rename
 [❌] modify
 [❌] installapp -file
 [❌] installapp -apk

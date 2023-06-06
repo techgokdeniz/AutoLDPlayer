@@ -37,6 +37,44 @@ class AutoLDPlayer {
   }
 
   /**
+   * Reboot a LDPlayer instance by name
+   * LDPlayer isim ile yeniden başlat
+   * @param {String} name
+   */
+  async rebootByName(name) {
+    this.executeCommand(`reboot --name ${name}`);
+  }
+
+  /**
+   * Reboot a LDPlayer instance by index
+   * LDPlayer index ile yeniden başlat
+   * @param {Number} index
+   */
+  async rebootByIndex(index) {
+    this.executeCommand(`reboot --index ${index}`);
+  }
+
+  /**
+   * Rename LDPlayer instance by name
+   * LDPlayer isim ile yeniden adlandır
+   * @param {String} name
+   * @param {String} newName
+   */
+  async renameByName(name, newName) {
+    this.executeCommand(`rename --name ${name} --title ${newName}`);
+  }
+
+  /**
+   * Rename LDPlayer instance by index
+   * LDPlayer index ile yeniden adlandır
+   * @param {Number} index
+   * @param {String} newName
+   */
+  async renameByIndex(index, newName) {
+    this.executeCommand(`rename --index ${index} --title ${newName}`);
+  }
+
+  /**
    * List all running LDPlayer instances
    * Çalışan tüm LDPlayer'ları listele
    */
@@ -44,10 +82,20 @@ class AutoLDPlayer {
     this.executeCommand("runninglist");
   }
 
+  /**
+   * Check if a LDPlayer instance is running by name
+   * LDPlayer isim ile çalışıyor mu kontrol et
+   * @param {String} name
+   */
   async isRunningByName(name) {
     this.executeCommand(`isrunning --name ${name}`);
   }
 
+  /**
+   * Check if a LDPlayer instance is running by index
+   * LDPlayer index ile çalışıyor mu kontrol et
+   * @param {Number} index
+   */
   async isRunningByIndex(index) {
     this.executeCommand(`isrunning --index ${index}`);
   }
@@ -72,7 +120,7 @@ class AutoLDPlayer {
   /**
    * Launch a LDPlayer instance by index
    * LDPlayer index ile aç
-   * @param {int} PlayerIndex
+   * @param {Number} PlayerIndex
    */
   async launchIndex(index) {
     this.executeCommand(`launch --index ${index}`);
@@ -90,7 +138,7 @@ class AutoLDPlayer {
   /**
    * Close a LDPlayer instance by index
    * LDPlayer index ile kapat
-   * @param {int} index
+   * @param {Number} index
    */
   async quitIndex(index) {
     this.executeCommand(`quit --index ${index}`);
@@ -117,7 +165,7 @@ class AutoLDPlayer {
   /**
    * Delete a LDPlayer instance by index
    * LdPlayer index ile sil
-   * @param {int} PlayerIndex
+   * @param {Number} PlayerIndex
    */
   async deleteInstanceIndex(index) {
     this.executeCommand(`remove --index ${index}`);
@@ -133,6 +181,87 @@ class AutoLDPlayer {
     this.executeCommand(`copy --name ${name} --from ${InstanceName}`);
   }
 
+  ///////////////////////// MODİFY SECTION /////////////////////////
+
+  /**
+   * Modify resulation a LDPlayer instance name
+   * LDPlayerin çözünürlüğünü değiştirir
+   * @param {String} name
+   * @param {Number} width
+   * @param {Number} height
+   * @param {Number} dpi
+   */
+  async modifyResolutionName(name, width, height, dpi) {
+    this.executeCommand(
+      `modify --name ${name} --resolution ${width},${height},${dpi}`
+    );
+  }
+
+  /**
+   * Modify resulation a LDPlayer instance index
+   * LDPlayerin çözünürlüğünü değiştirir
+   * @param {String} name
+   * @param {Number} width
+   * @param {Number} height
+   * @param {Number} dpi
+   */
+  async modifyResolutionIndex(index, width, height, dpi) {
+    this.executeCommand(
+      `modify --index ${index} --resolution ${width},${height},${dpi}`
+    );
+  }
+
+  /**
+   * Modify CPU count of a LDPlayer instance by name
+   * LDPlayerin CPU sayısını değiştirir
+   * @param {String} name
+   * @param {Number} cpu
+   */
+  async modifyCpuName(name, cpu) {
+    if (cpu < 1 || cpu > 4)
+      throw new Error("CPU count must be between 1 and 4");
+    this.executeCommand(`modify --name ${name} --cpu ${cpu}`);
+  }
+
+  /**
+   * Modify CPU count of a LDPlayer instance by index
+   * LDPlayerin CPU sayısını değiştirir
+   * @param {String} name
+   * @param {Number} cpu
+   */
+  async modifyCpuIndex(index, cpu) {
+    if (cpu < 1 || cpu > 4)
+      throw new Error("CPU count must be between 1 and 4");
+    this.executeCommand(`modify --index ${index} --cpu ${cpu}`);
+  }
+
+  /**
+   * Modify memory of a LDPlayer instance by name
+   * LDPlayerin RAM miktarını değiştirir
+   * @param {String} name
+   * @param {Number} memory
+   */
+  async modifyMemoryName(name, memory) {
+    if (memory % 512 !== 0 || memory < 512)
+      throw new Error(
+        "Memory must be a multiple of 512 and can take a minimum of 512mb."
+      );
+    this.executeCommand(`modify --name ${name} --memory ${memory}`);
+  }
+
+  /**
+   *
+   * @param {Number} index
+   * @param {Number} memory
+   */
+  async modifyMemoryIndex(index, memory) {
+    if (memory % 512 !== 0 || memory < 512)
+      throw new Error(
+        "Memory must be a multiple of 512 and can take a minimum of 512mb."
+      );
+    this.executeCommand(`modify --index ${index} --memory ${memory}`);
+  }
+
   /**
    * Execute a command
    * Komut çalıştır
@@ -140,6 +269,7 @@ class AutoLDPlayer {
    */
   async executeCommand(command) {
     if (this.debug) {
+      logger.info("--------------------");
       logger.info(`Executing command: ${command}`);
     }
 
@@ -160,10 +290,12 @@ class AutoLDPlayer {
       if (this.debug) {
         if (code === 0) {
           logger.succes(`Command executed: ${command}`);
+          logger.info("--------------------");
         } else {
           logger.error(
             `Command failed: ${command} code : ${code} signal: ${signal}`
           );
+          logger.info("--------------------");
         }
       }
     });
