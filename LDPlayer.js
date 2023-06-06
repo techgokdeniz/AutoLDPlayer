@@ -1,4 +1,4 @@
-import logger from "./logger.js";
+import logger from "./helper/logger.js";
 import { spawn } from "child_process";
 
 class AutoLDPlayer {
